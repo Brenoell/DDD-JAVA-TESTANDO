@@ -21,7 +21,7 @@ public class FilmeController {
         service.cadastrar(filme);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/excluir/{id}")
     public void excluir(@PathVariable long id) {
         service.excluir(id);
     }
@@ -40,5 +40,7 @@ public class FilmeController {
     public List<Filme> consultarPorAno(@PathVariable int ano) {
         return service.consultarPorAno(ano);
     }
+
+
 }
 

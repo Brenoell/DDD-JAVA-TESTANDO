@@ -40,8 +40,14 @@ public class FilmeDAO {
             ps.setString(10, filme.getDescricao());
             ps.setDouble(11, filme.getAvaliacao());
             ps.setString(12, filme.getEmCartaz().name());
+
+            ps.executeUpdate();
+
+
             ps.close();
+
             conexao.close();
+
 
         }catch (SQLException e){
             throw new RuntimeException(e);
