@@ -9,12 +9,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FilmeDAO {
 
     private Connection conexao;
 
     public void cadastro(Filme filme){
+
+
         conexao = ConnectionFactory.obterConexao();
         PreparedStatement ps = null;
         try{
@@ -141,15 +145,26 @@ public class FilmeDAO {
         return filme;
     }
 
-    public Filme consultaAnoFilme(int ano){
+    public List<Filme> consultaAnoFilme(int ano) {
+
         conexao = ConnectionFactory.obterConexao();
         PreparedStatement ps = null;
-        Filme filme = new Filme();
-        try{
-            ps = conexao.prepareStatement("Select * from tbl_filme where NR_ANO = ?");
-            ps.setInt(6, ano);
+        List<Filme> filmes = new ArrayList<>();
+
+        try {
+
+            ps = conexao.prepareStatement(
+                    "SELECT * FROM tbl_filme WHERE NR_ANO = ?"
+            );
+
+            ps.setInt(1, ano);
+
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){
+
+            while (rs.next()) {
+
+                Filme filme = new Filme();
+
                 filme.setId(rs.getLong(1));
                 filme.setNome(rs.getString(2));
                 filme.setDuracao(rs.getInt(3));
@@ -169,12 +184,16 @@ public class FilmeDAO {
                         SimNaoEnum.valueOf(rs.getString(12))
                 );
 
-                rs.close();
-                ps.close();
+                filmes.add(filme);
             }
-        }catch (SQLException e){
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return filme;
+
+        return filmes;
     }
 }
